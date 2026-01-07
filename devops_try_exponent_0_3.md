@@ -22,6 +22,30 @@ Estimated Time: 60-80 hours
 Target Audience: 0-3 years experience
 Outcome: Ready for junior DevOps roles at startups and mid-sized companies
 
+DevOps Engineer (0 - 3 yrs)
+Course Type: role-specific
+Role: DevOps Engineer
+Course Title: DevOps Fundamentals - Career Launch
+
+Course Description: Master DevOps fundamentals from the ground up with hands-on labs and real-world projects. Perfect for beginners with 0-3 years of experience looking to break into DevOps or level up from IT support roles. Build a strong foundation in Linux, Git, CI/CD, Docker, and AWS through practical exercises designed for junior-level interviews at startups and mid-sized companies.
+
+
+Module 1: Welcome to DevOps (4 classes)
+Module 2: Linux Essentials (15 classes)
+Module 3: Version Control with Git (12 classes)
+Module 4: Introduction to Cloud Computing with AWS (15 classes)
+Module 5: Docker Basics (10 classes)
+Module 6: CI/CD Fundamentals (12 classes)
+Module 7: Basic Infrastructure as Code (10 classes)
+Module 8: Introduction to Kubernetes (12 classes)
+Module 9: Basic Monitoring and Logging (8 classes)
+Module 10: DevOps Interview Preparation for Juniors (10 classes)
+
+Total: 108 classes
+Estimated Time: 60-80 hours
+Target Audience: 0-3 years experience
+Outcome: Ready for junior DevOps roles at startups and mid-sized companies
+
 Module 1:
 Title: Welcome to DevOps
 Description: Build a solid foundation for your DevOps career. Understand the role, master essential skills, and navigate your first steps into DevOps.
@@ -264,6 +288,7 @@ Interview preparation basics
 Portfolio building
 When to apply for jobs
 Realistic expectations for beginners
+
 
 
 Module 2:
@@ -1202,21 +1227,6 @@ chmod +x script.sh
 
 
 
-Class 2.5.1:
-Title: Linux Fundamentals Challenge
-Description: Testing navigation, permissions, and scripting skills.
-Content Type: contest
-Duration: 3600
-Order: 1
-Contest URL: 
-Contest Questions: 6
-Contest Syllabus:
-File System Navigation and Manipulation
-User and Group Administration
-File Permissions (Octal and Symbolic)
-Process Management (ps, kill, top)
-Grep, Pipes, and Redirection
-Basic Bash Scripting (Variables and Loops)
 
 Module 3:
 Title: Version Control with Git
@@ -1991,20 +2001,6 @@ git revert <commit-hash>
 ---
 
 
-Class 3.5.1:
-Title: Git Version Control Challenge
-Description: Testing branching, merging, and conflict resolution skills.
-Content Type: contest
-Duration: 3600
-Order: 1
-Contest URL: 
-Contest Questions: 5
-Contest Syllabus:
-Initializing Repositories and Committing (Add, Commit, Status)
-Branching Strategies and Switching Contexts
-Resolving Merge Conflicts (Manual resolution)
-Remote Operations (Push, Pull, Clone)
-Git History Traversal (Log, Reset, Revert)
 
 
 Module 4:
@@ -3438,20 +3434,6 @@ A common mistake is allowing inbound traffic in a NACL but forgetting to allow t
 
 
 
-Class 4.6.1:
-Title: AWS Architecture Challenge
-Description: Validating cloud architecture and deployment skills.
-Content Type: contest
-Duration: 3600
-Order: 1
-Contest URL: 
-Contest Questions: 5
-Contest Syllabus:
-VPC Design (Public/Private Subnets, Route Tables)
-EC2 Security Group configurations
-IAM Policies and Role assumption
-S3 Object permissions and Static Hosting
-Debugging connectivity issues (NACLs vs Security Groups)
 
 Module 5:
 Title: Docker Basics
@@ -5374,20 +5356,7 @@ Docker Compose is used for:
 ---
 
 
-Class 5.5.1:
-Title: Docker Basics Challenge
-Description: Testing Dockerfile creation and container management.
-Content Type: contest
-Duration: 3600
-Order: 1
-Contest URL: 
-Contest Questions: 5
-Contest Syllabus:
-Dockerfile instructions (FROM, RUN, COPY, CMD)
-Container Lifecycle (run, stop, rm, ps)
-Port Mapping and Volume mounting
-Debugging with logs and exec
-Docker Compose syntax and usage
+
 
 Module 6:
 Title: CI/CD Fundamentals
@@ -7199,20 +7168,6 @@ archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
 
 
 
-Class 6.4.1:
-Title: Jenkins Pipeline Challenge
-Description: Testing pipeline creation and automation logic.
-Content Type: contest
-Duration: 3600
-Order: 1
-Contest URL:
-Contest Questions: 5
-Contest Syllabus:
-Jenkins Architecture (Controller/Agent)
-Declarative Pipeline Syntax and Structure
-Configuring Webhooks and Triggers
-Managing Environment Variables and Secrets
-Analyzing Build Logs and Artifacts
 
 Module 7:
 Title: Basic Infrastructure as Code
@@ -8251,21 +8206,7 @@ Effective debugging relies on understanding module behavior, not trial-and-error
 ---
 
 
-Class 7.3.2:
-Title: Terraform & Ansible Challenge
-Description: Testing HCL syntax, YAML logic, and core concepts.
-Content Type: contest
-Duration: 3600
-Order: 2
-Contest URL: 
-Contest Questions: 6
-Contest Syllabus:
-Terraform Providers and Resources syntax
-Terraform State file purpose and commands
-Ansible Inventory management
-Ansible Modules (apt, copy, service)
-Idempotency concepts
-Debugging Playbook errors
+
 
 Module 8:
 Title: Introduction to Kubernetes
@@ -12600,21 +12541,6 @@ Requests and limits are essential for cluster stability.
 ---
 
 
-Class 8.4.3:
-Title: Kubernetes Challenge
-Description: Validating Deployment, Networking, and Troubleshooting skills.
-Content Type: contest
-Duration: 3600
-Order: 3
-Contest URL: 
-Contest Questions: 6
-Contest Syllabus:
-Creating Deployments and exposing them via Services
-Managing ConfigMaps and Secrets
-Troubleshooting CrashLoopBackOff and ImagePullBackOff
-Pod Selector logic and Labels
-Basic Kubectl commands (logs, exec, get, describe)
-Resource Limits and Requests syntax
 
 Module 9:
 Title: Basic Monitoring and Logging
@@ -13563,21 +13489,6 @@ Goal of alerting:
 ---
 
 
-
-Class 9.4.1:
-Title: Monitoring Setup Challenge
-Description: Testing metric analysis and log debugging skills.
-Content Type: contest
-Duration: 3600
-Order: 1
-Contest URL: 
-Contest Questions: 5
-Contest Syllabus:
-Interpreting Linux Load Average and Memory metrics
-Differentiating Log Levels (DEBUG vs ERROR)
-Basic Prometheus Querying (PromQL logic)
-Identifying Saturation vs Utilization
-Designing actionable alerts vs noise
 
 Module 10:
 Title: DevOps Interview Preparation for Juniors
