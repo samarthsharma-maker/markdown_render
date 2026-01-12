@@ -22,30 +22,6 @@ Estimated Time: 60-80 hours
 Target Audience: 0-3 years experience
 Outcome: Ready for junior DevOps roles at startups and mid-sized companies
 
-DevOps Engineer (0 - 3 yrs)
-Course Type: role-specific
-Role: DevOps Engineer
-Course Title: DevOps Fundamentals - Career Launch
-
-Course Description: Master DevOps fundamentals from the ground up with hands-on labs and real-world projects. Perfect for beginners with 0-3 years of experience looking to break into DevOps or level up from IT support roles. Build a strong foundation in Linux, Git, CI/CD, Docker, and AWS through practical exercises designed for junior-level interviews at startups and mid-sized companies.
-
-
-Module 1: Welcome to DevOps (4 classes)
-Module 2: Linux Essentials (15 classes)
-Module 3: Version Control with Git (12 classes)
-Module 4: Introduction to Cloud Computing with AWS (15 classes)
-Module 5: Docker Basics (10 classes)
-Module 6: CI/CD Fundamentals (12 classes)
-Module 7: Basic Infrastructure as Code (10 classes)
-Module 8: Introduction to Kubernetes (12 classes)
-Module 9: Basic Monitoring and Logging (8 classes)
-Module 10: DevOps Interview Preparation for Juniors (10 classes)
-
-Total: 108 classes
-Estimated Time: 60-80 hours
-Target Audience: 0-3 years experience
-Outcome: Ready for junior DevOps roles at startups and mid-sized companies
-
 Module 1:
 Title: Welcome to DevOps
 Description: Build a solid foundation for your DevOps career. Understand the role, master essential skills, and navigate your first steps into DevOps.
@@ -267,27 +243,6 @@ Order: 4
 
 ---
 
-Topic 1.2:
-Title: Module Challenge
-Order: 2
-
-Class 1.2.1:
-Title: DevOps Foundations Challenge
-Description: Test your understanding of DevOps fundamentals and learning strategy.
-Content Type: contest
-Duration: 1800
-Order: 1
-Contest URL: 
-Contest Questions: 10
-Contest Syllabus:
-What DevOps is and core principles
-DevOps roles and career paths
-Essential skills for entry-level
-Learning timeline and milestones
-Interview preparation basics
-Portfolio building
-When to apply for jobs
-Realistic expectations for beginners
 
 
 
@@ -15951,3 +15906,4 @@ Order: 2
 * Focus on data, not emotions. "We disagreed on the tool choice. I built a small POC (Proof of Concept) for both, compared the metrics, and we went with the data."
 
 ---
+
