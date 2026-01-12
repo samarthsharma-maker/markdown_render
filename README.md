@@ -13484,23 +13484,1197 @@ Goal of alerting:
 
 ---
 
-
-
 Module 10:
+Title: Technical Recap - DevOps Essentials
+Description: A quick reference guide covering everything you've learned across Linux, Git, AWS, Docker, CI/CD, IaC, Kubernetes, and Monitoring. Perfect for review before interviews or when you need a quick refresher.
+Order: 10
+Learning Outcomes:
+Quickly recall key concepts from each module
+Understand how all components connect in a DevOps workflow
+Identify areas that need deeper study
+
+Topic 10.1:
+Title: Linux & Shell Scripting Essentials
+Order: 1
+
+Class 10.1.1:
+	Title: Linux & Shell Scripting Quick Reference
+	Description: Essential commands and scripting patterns you'll use daily.
+Content Type: text
+Duration: 400
+Order: 1
+		Text Content :
+
+# Linux & Shell Scripting Quick Reference
+
+## Essential Linux Commands
+
+**File & Directory Navigation**
+- `pwd` → Print working directory
+- `ls -la` → List files with details (permissions, owner, size)
+- `cd /path` → Change directory
+- `mkdir -p /path/to/dir` → Create directories recursively
+- `rm -rf` → Remove recursively (dangerous!)
+- `cp -r source dest` → Copy recursively
+- `mv source dest` → Move/rename
+- `find . -name "*.txt"` → Find files matching pattern
+
+**File Viewing & Editing**
+- `cat file` → View entire file
+- `head -n 20 file` → First 20 lines
+- `tail -f file` → Follow file (watch new lines)
+- `grep "pattern" file` → Search lines matching pattern
+- `sed 's/old/new/g' file` → Replace text
+- `awk '{print $1}' file` → Extract columns
+- `nano/vim file` → Edit file
+
+**System Information**
+- `uname -a` → System info
+- `df -h` → Disk usage (human-readable)
+- `du -sh /path` → Directory size
+- `top` / `htop` → Process monitoring (live)
+- `ps aux` → All running processes
+- `w` → Who's logged in
+- `uptime` → System uptime and load
+- `dmesg` → Kernel messages (boot/hardware)
+
+**Users & Permissions**
+- `sudo command` → Run as root
+- `chmod 755 file` → Change permissions (rwxr-xr-x)
+- `chown user:group file` → Change ownership
+- `useradd user` → Add user
+- `passwd user` → Set password
+- `groups user` → Show user groups
+- `id` → Current user info
+
+**Text Processing**
+- `cat file1 file2 > combined` → Concatenate
+- `grep -i "text" file` → Case-insensitive search
+- `grep -r "pattern" /path` → Recursive search
+- `wc -l file` → Count lines
+- `sort file` → Sort lines
+- `uniq file` → Remove duplicates (must be sorted)
+- `tr 'a-z' 'A-Z'` → Translate characters
+
+**Networking**
+- `ping host` → Check connectivity
+- `curl url` → Fetch web content
+- `wget url` → Download file
+- `ssh user@host` → Remote login
+- `scp file user@host:/path` → Secure copy
+- `netstat -tuln` → Active network connections
+- `ifconfig` / `ip addr` → Network config
+- `nslookup domain` → DNS lookup
+
+---
+
+## Bash Scripting Patterns
+
+**Variables & Input**
+```bash
+VAR="value"                    # Set variable
+echo $VAR                      # Use variable
+read -p "Prompt: " INPUT       # Read user input
+$1, $2, $@                     # Script arguments
+```
+
+**Conditionals**
+```bash
+if [ $? -eq 0 ]; then          # If exit code is 0
+  echo "Success"
+elif [ -f file ]; then         # File exists?
+  echo "File found"
+else
+  echo "File not found"
+fi
+
+[[ $var == "pattern" ]] && echo "Match" || echo "No match"  # AND/OR
+```
+
+**Loops**
+```bash
+for i in 1 2 3; do             # Simple loop
+  echo $i
+done
+
+for file in *.txt; do          # Loop over files
+  cat $file
+done
+
+while [ $counter -lt 10 ]; do  # While condition
+  ((counter++))
+done
+
+for ((i=0; i<10; i++)); do     # C-style loop
+  echo $i
+done
+```
+
+**Functions**
+```bash
+function backup_logs() {       # Define function
+  cp /var/log/*.log /backups/
+  echo "Backup done"
+}
+
+backup_logs                    # Call function
+```
+
+**Error Handling**
+```bash
+set -e                         # Exit on error
+set -u                         # Error on undefined var
+set -o pipefail                # Pipe fails if any step fails
+trap 'echo "Error on line $LINENO"' ERR  # Catch errors
+```
+
+**Arrays**
+```bash
+NAMES=("Alice" "Bob" "Charlie")
+echo ${NAMES[0]}               # First element
+echo ${NAMES[@]}               # All elements
+echo ${#NAMES[@]}              # Array length
+```
+
+---
+
+## Common DevOps Scripts
+
+**Disk Space Monitoring**
+```bash
+THRESHOLD=80
+USAGE=$(df / | awk 'NR==2 {print $5}' | cut -d'%' -f1)
+[ $USAGE -gt $THRESHOLD ] && echo "Disk usage high: $USAGE%"
+```
+
+**Process Restart Script**
+```bash
+SERVICE="nginx"
+if ! pgrep -x "$SERVICE" > /dev/null; then
+  echo "Starting $SERVICE"
+  systemctl start $SERVICE
+fi
+```
+
+**Log Rotation**
+```bash
+LOGFILE="/var/log/app.log"
+if [ -f $LOGFILE ]; then
+  SIZE=$(stat -f%z "$LOGFILE" 2>/dev/null || stat -c%s "$LOGFILE")
+  if [ $SIZE -gt 104857600 ]; then  # 100MB
+    mv $LOGFILE $LOGFILE.$(date +%s)
+    gzip $LOGFILE.*
+  fi
+fi
+```
+
+---
+
+## Permissions Cheatsheet
+
+| Permission | Number | Meaning |
+|-----------|--------|---------|
+| r (read) | 4 | View file contents |
+| w (write) | 2 | Modify file |
+| x (execute) | 1 | Run file (or enter directory) |
+
+**Examples:**
+- `chmod 755 script.sh` → rwxr-xr-x (owner: read/write/execute, others: read/execute)
+- `chmod 644 file.txt` → rw-r--r-- (owner: read/write, others: read only)
+- `chmod 700 dir` → rwx------ (only owner can access)
+- `sudo chown root:root file` → Change owner to root
+
+---
+
+Topic 10.2:
+Title: Git & Version Control Essentials
+Order: 2
+
+Class 10.2.1:
+	Title: Git Commands & Workflow Quick Reference
+	Description: Essential Git operations for DevOps.
+Content Type: text
+Duration: 350
+Order: 1
+		Text Content :
+
+# Git Commands & Workflow Quick Reference
+
+## Core Git Workflow
+
+**Initial Setup**
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+git init                       # Initialize repo
+git clone <url>                # Clone existing repo
+```
+
+**Daily Workflow**
+```bash
+git status                     # Check changed files
+git add .                      # Stage all changes
+git add filename               # Stage specific file
+git commit -m "message"        # Commit staged changes
+git push origin main           # Push to remote
+git pull                       # Fetch + merge latest
+```
+
+---
+
+## Branching & Collaboration
+
+```bash
+git branch                     # List branches
+git branch feature-x           # Create branch
+git checkout feature-x         # Switch to branch
+git checkout -b feature-x      # Create and switch
+git merge feature-x            # Merge branch into current
+git branch -d feature-x        # Delete branch
+git push origin feature-x      # Push branch to remote
+```
+
+---
+
+## Undoing Changes
+
+```bash
+git diff                       # See uncommitted changes
+git diff --staged              # See staged changes
+git restore file               # Discard changes (undo edits)
+git restore --staged file      # Unstage file
+git reset HEAD~1               # Undo last commit (keep changes)
+git revert <commit>            # Create new commit that undoes changes
+git log --oneline              # Show commit history
+git checkout <commit> -- file  # Restore file from old commit
+```
+
+---
+
+## Conflict Resolution
+
+```bash
+git merge feature-branch       # Merge attempt
+# If conflicts, markers appear: <<<<<<< | ======= | >>>>>>>
+# Edit file, remove markers, keep desired code
+git add .
+git commit -m "Resolved conflicts"
+```
+
+---
+
+## Remote Operations
+
+```bash
+git remote -v                  # List remote repos
+git remote add origin <url>    # Add remote
+git push origin main           # Push branch
+git push -u origin main        # Push and set upstream
+git pull origin main           # Pull from main branch
+git fetch origin               # Get latest without merging
+git push origin --delete branch-name  # Delete remote branch
+```
+
+---
+
+## Best Practices
+
+- **Commit Often:** Small, logical commits (not 100 files at once)
+- **Write Clear Messages:** "Fix login bug" not "update"
+- **Pull Before Push:** Always sync before pushing
+- **Use Branches:** Never commit directly to main
+- **No Secrets:** Use `.gitignore` for credentials, `.env` files
+- **Code Review:** Push → PR → review → merge
+
+---
+
+Topic 10.3:
+Title: AWS Essentials
+Order: 3
+
+Class 10.3.1:
+	Title: AWS Services Quick Reference
+	Description: The core AWS services you'll use in DevOps.
+Content Type: text
+Duration: 350
+Order: 1
+		Text Content :
+
+# AWS Services Quick Reference
+
+## Core Services (Know These Cold)
+
+**EC2 (Elastic Compute Cloud)**
+- Virtual machines in the cloud
+- Key concepts: Instances (servers), AMIs (images), Security Groups (firewalls), Key Pairs (SSH keys)
+- Use case: Run web servers, databases, applications
+- Quick check: `ssh -i key.pem ec2-user@instance-ip`
+
+**S3 (Simple Storage Service)**
+- Object storage (files, backups, static websites)
+- Buckets are like folders; objects are files
+- Highly available and durable
+- Use case: Store logs, artifacts, backups, static site content
+- Quick check: `aws s3 ls` to list buckets
+
+**RDS (Relational Database Service)**
+- Managed databases (MySQL, PostgreSQL, MariaDB, Oracle)
+- No need to manage OS; AWS handles backups, patches, replicas
+- Use case: Store structured data (users, orders, products)
+- Backup automatically, multi-AZ for high availability
+
+**VPC (Virtual Private Cloud)**
+- Your isolated network in AWS
+- Contains: Subnets, Route Tables, Internet Gateways, NAT Gateways
+- Public Subnet: Has internet access (for load balancers, web servers)
+- Private Subnet: No internet access (for databases, internal services)
+
+**IAM (Identity Access Management)**
+- User & permission management
+- Least privilege principle: Give only needed permissions
+- Key items: Users, Roles, Policies, Access Keys
+- Example: EC2 instances assume role to access S3 without hardcoding credentials
+
+---
+
+## Common Architecture Patterns
+
+**Three-Tier Web App**
+```
+Internet Gateway
+    ↓
+Load Balancer (ELB/ALB)
+    ↓
+Web Servers (EC2 in public subnet)
+    ↓
+Database (RDS in private subnet)
+    ↓
+S3 for static assets
+```
+
+**CI/CD Pipeline on AWS**
+```
+GitHub Webhook
+    ↓
+CodePipeline (orchestration)
+    ↓
+CodeBuild (build Docker image)
+    ↓
+Push to ECR (container registry)
+    ↓
+CodeDeploy (deploy to EC2 or ECS)
+```
+
+---
+
+## Essential AWS CLI Commands
+
+```bash
+aws ec2 describe-instances              # List running instances
+aws ec2 start-instances --instance-ids  # Start instance
+aws s3 ls                               # List buckets
+aws s3 cp file s3://bucket/             # Upload to S3
+aws iam get-user                        # Check current IAM user
+aws rds describe-db-instances           # List databases
+```
+
+---
+
+Topic 10.4:
+Title: Docker & Containerization
+Order: 4
+
+Class 10.4.1:
+	Title: Docker Quick Reference
+	Description: Container concepts and Docker commands.
+Content Type: text
+Duration: 300
+Order: 1
+		Text Content :
+
+# Docker Quick Reference
+
+## What is Docker?
+
+**Container:** Lightweight, self-contained package with app + dependencies + runtime.
+
+**Image:** Blueprint (like a template). Immutable.
+**Container:** Running instance of an image. Ephemeral.
+
+Example: Python app needs Python 3.9 + Flask + PostgreSQL client. Instead of installing on server, package all in Docker image. Run anywhere.
+
+---
+
+## Dockerfile Essentials
+
+```dockerfile
+FROM python:3.9-slim                           # Base image
+
+WORKDIR /app                                   # Set working dir
+
+COPY requirements.txt .                        # Copy file
+RUN pip install -r requirements.txt            # Run command (build-time)
+
+COPY . .                                       # Copy app code
+
+EXPOSE 5000                                    # Document port (info only)
+
+CMD ["python", "app.py"]                       # Default command
+```
+
+**Build & Run:**
+```bash
+docker build -t myapp:1.0 .                    # Build image
+docker run -p 5000:5000 myapp:1.0              # Run container
+docker ps                                      # List running containers
+docker exec -it container-id bash              # Enter running container
+docker logs container-id                       # View logs
+docker stop container-id                       # Stop container
+docker rm container-id                         # Delete container
+```
+
+---
+
+## Multi-Stage Build (Production Pattern)
+
+```dockerfile
+# Stage 1: Build
+FROM golang:1.19 AS builder
+WORKDIR /app
+COPY . .
+RUN go build -o myapp .
+
+# Stage 2: Runtime (smaller image)
+FROM alpine:3.18
+WORKDIR /app
+COPY --from=builder /app/myapp .
+ENTRYPOINT ["./myapp"]
+```
+
+Why? Builder stage is large (dependencies, dev tools). Runtime is tiny (just binary).
+
+---
+
+## Docker Compose (Multi-Container)
+
+```yaml
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgres://db:5432/myapp
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+```
+
+```bash
+docker-compose up                              # Start all services
+docker-compose down                            # Stop all services
+docker-compose logs -f web                     # View logs
+```
+
+---
+
+Topic 10.5:
+Title: CI/CD Fundamentals
+Order: 5
+
+Class 10.5.1:
+	Title: CI/CD & Automation Quick Reference
+	Description: Pipeline concepts and GitHub Actions basics.
+Content Type: text
+Duration: 350
+Order: 1
+		Text Content :
+
+# CI/CD & Automation Quick Reference
+
+## What is CI/CD?
+
+**CI (Continuous Integration):** Automatically test code changes.
+**CD (Continuous Deployment):** Automatically deploy passing code to production.
+
+**Workflow:**
+1. Push code to Git
+2. Pipeline triggers automatically
+3. Build (compile, bundle)
+4. Test (unit tests, integration tests)
+5. Deploy (if all pass)
+
+**Benefits:**
+- Catch bugs early (before production)
+- Deploy multiple times per day
+- Rollback quickly if issues
+- Confidence in code quality
+
+---
+
+## GitHub Actions Workflow Example
+
+```yaml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Run tests
+        run: pytest tests/
+      
+      - name: Build Docker image
+        run: docker build -t myapp:${{ github.sha }} .
+      
+      - name: Push to registry
+        run: docker push myapp:${{ github.sha }}
+      
+      - name: Deploy
+        run: |
+          ssh user@server "docker pull myapp:${{ github.sha }} && docker run -d myapp:${{ github.sha }}"
+```
+
+---
+
+## Key Pipeline Stages
+
+| Stage | Purpose | Example |
+|-------|---------|---------|
+| **Build** | Compile code, resolve dependencies | `npm install && npm run build` |
+| **Test** | Run unit + integration tests | `pytest` or `npm test` |
+| **Package** | Create artifact (Docker image, JAR, etc.) | `docker build` |
+| **Deploy** | Release to environment | Push to ECR, restart service |
+| **Smoke Test** | Quick sanity check post-deploy | `curl https://myapp.com/health` |
+
+---
+
+## Common Tools
+
+- **GitHub Actions:** CI/CD integrated in GitHub
+- **Jenkins:** Self-hosted, highly customizable
+- **GitLab CI:** Built into GitLab
+- **CircleCI:** Cloud-based
+- **AWS CodePipeline:** AWS-native orchestration
+
+---
+
+Topic 10.6:
+Title: Infrastructure as Code
+Order: 6
+
+Class 10.6.1:
+	Title: Infrastructure as Code Quick Reference
+	Description: Terraform, Ansible, and CloudFormation essentials.
+Content Type: text
+Duration: 350
+Order: 1
+		Text Content :
+
+# Infrastructure as Code Quick Reference
+
+## What is IaC?
+
+**Concept:** Define infrastructure (servers, networks, databases) in code, not manually.
+
+**Benefits:**
+- Version control for infrastructure
+- Reproducible environments
+- Automated testing of infrastructure
+- Disaster recovery (rebuild from code)
+- Team collaboration
+
+---
+
+## Terraform Essentials
+
+```hcl
+# Define AWS provider
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "~> 4.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+# Create EC2 instance
+resource "aws_instance" "web" {
+  ami           = "ami-0c55b159cbfafe1f0"   # Amazon Linux
+  instance_type = "t2.micro"
+  
+  tags = {
+    Name = "WebServer"
+  }
+}
+
+# Create S3 bucket
+resource "aws_s3_bucket" "backups" {
+  bucket = "my-backups-bucket"
+}
+
+# Output values
+output "instance_ip" {
+  value = aws_instance.web.public_ip
+}
+```
+
+**Common Commands:**
+```bash
+terraform init                    # Initialize (download providers)
+terraform plan                    # Show what will change
+terraform apply                   # Apply changes
+terraform destroy                 # Tear down resources
+terraform state list              # View managed resources
+terraform state show aws_instance.web  # Details of specific resource
+```
+
+---
+
+## Ansible Essentials
+
+```yaml
+# playbook.yml
+---
+- hosts: all
+  tasks:
+    - name: Update system
+      apt:
+        update_cache: yes
+    
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+    
+    - name: Start Docker
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+    
+    - name: Create deployment directory
+      file:
+        path: /opt/myapp
+        state: directory
+        mode: '0755'
+```
+
+**Run Playbook:**
+```bash
+ansible-playbook playbook.yml -i inventory.ini
+```
+
+---
+
+## CloudFormation (AWS Native)
+
+```yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Simple web server'
+
+Resources:
+  WebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c55b159cbfafe1f0
+      InstanceType: t2.micro
+      SecurityGroups:
+        - !Ref WebSecurityGroup
+  
+  WebSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+Outputs:
+  InstanceIP:
+    Value: !GetAtt WebServer.PublicIp
+```
+
+---
+
+## Key Principles
+
+- **Idempotent:** Running twice = same result (safe)
+- **Declarative:** Declare desired state, tool figures out how
+- **DRY:** Don't repeat yourself; use modules/templates
+- **Version Control:** All infrastructure changes tracked
+
+---
+
+Topic 10.7:
+Title: Kubernetes Essentials
+Order: 7
+
+Class 10.7.1:
+	Title: Kubernetes Quick Reference
+	Description: Core Kubernetes concepts and kubectl commands.
+Content Type: text
+Duration: 350
+Order: 1
+		Text Content :
+
+# Kubernetes Quick Reference
+
+## What is Kubernetes?
+
+**Orchestrator:** Manages containers at scale (scheduling, scaling, networking, storage).
+
+**Why?** Running 1 Docker container = simple. Running 1000 containers across 50 servers = chaos. K8s solves it.
+
+---
+
+## Core Concepts
+
+| Concept | Meaning | Example |
+|---------|---------|---------|
+| **Pod** | Smallest deployable unit (1+ containers) | Web server container + logging sidecar |
+| **Deployment** | Manages Pods (scaling, updates) | "Run 3 replicas of my app" |
+| **Service** | Network access to Pods | Load balancer for Pods |
+| **Namespace** | Isolation (virtual cluster) | `default`, `kube-system`, `production` |
+| **ConfigMap** | Configuration data | Database URL, API keys |
+| **Secret** | Sensitive data (encrypted) | Database password |
+| **PersistentVolume (PV)** | Storage | Database files persist |
+| **Ingress** | HTTP routing (DNS → Service) | `example.com/api` → API service |
+
+---
+
+## YAML Manifest Example
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 3                           # Run 3 copies
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: web
+        image: myapp:1.0
+        ports:
+        - containerPort: 5000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: url
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: api-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+spec:
+  selector:
+    app: web
+  ports:
+  - port: 80
+    targetPort: 5000
+  type: LoadBalancer                    # Exposes externally
+```
+
+---
+
+## Essential kubectl Commands
+
+```bash
+# Viewing Resources
+kubectl get pods                        # List Pods
+kubectl get pods -n production          # List Pods in namespace
+kubectl get deployments                 # List Deployments
+kubectl get services                    # List Services
+kubectl get nodes                       # List cluster nodes
+kubectl describe pod pod-name           # Details about Pod
+kubectl logs pod-name                   # View Pod logs
+kubectl logs -f pod-name                # Follow logs (live)
+
+# Creating & Updating
+kubectl apply -f deployment.yaml        # Create/update from file
+kubectl create deployment web --image=web:1.0   # Shorthand create
+kubectl delete pod pod-name             # Delete Pod
+
+# Debugging
+kubectl exec -it pod-name -- bash       # Shell into Pod
+kubectl port-forward pod-name 5000:5000 # Local port → Pod
+kubectl top nodes                       # CPU/Memory usage
+
+# Scaling & Updates
+kubectl scale deployment web --replicas=5     # Scale to 5 replicas
+kubectl set image deployment/web web=web:2.0  # Update image
+kubectl rollout history deployment/web        # Deployment versions
+kubectl rollout undo deployment/web           # Rollback
+```
+
+---
+
+## Deployment Strategies
+
+**Rolling Update (default):**
+- Kill 1 old Pod, start 1 new Pod
+- Old traffic switches to new Pod
+- No downtime, but brief inconsistency
+
+**Blue-Green:**
+- Run all old Pods (blue) + all new Pods (green) in parallel
+- Switch traffic from blue → green all at once
+- Easy rollback (switch back to blue)
+
+**Canary:**
+- Route 10% traffic to new version, 90% to old
+- Monitor metrics
+- Gradually increase % if healthy
+
+---
+
+Topic 10.8:
+Title: Monitoring & Logging
+Order: 8
+
+Class 10.8.1:
+	Title: Monitoring & Logging Quick Reference
+	Description: Metrics, logs, and alerting essentials.
+Content Type: text
+Duration: 350
+Order: 1
+		Text Content :
+
+# Monitoring & Logging Quick Reference
+
+## Observability Pillars
+
+| Pillar | Question | Tools | Example |
+|--------|----------|-------|---------|
+| **Metrics** | "What is happening?" | Prometheus, Grafana | CPU 80%, Memory 60%, Requests/sec 1000 |
+| **Logs** | "Why is it happening?" | ELK (Elasticsearch), Splunk, CloudWatch | "Connection timeout", "OOM killed" |
+| **Traces** | "Where is it happening?" | Jaeger, DataDog | Request flow across microservices |
+
+---
+
+## Key Metrics to Monitor
+
+**System-Level**
+- CPU Utilization (>80% = investigate)
+- Memory Available (>80% used = risk of OOM)
+- Disk Usage (>90% = action needed)
+- Network I/O (packet loss, latency)
+
+**Application-Level**
+- Request Rate (requests per second)
+- Error Rate (% of requests that fail)
+- Latency/Response Time (how long requests take)
+- Throughput (amount of work completed)
+
+**Infrastructure-Level**
+- Database Connection Pool (running out of connections?)
+- Queue Depth (jobs waiting to process)
+- Cache Hit Rate (how often cache serves requests)
+- Uptime (percentage of time service is available)
+
+---
+
+## Prometheus + Grafana Stack
+
+**Prometheus:**
+- Pulls metrics from servers/apps (every 15 seconds by default)
+- Stores time-series data
+- Provides query language (PromQL)
+
+**Prometheus Query Examples:**
+```promql
+node_cpu_seconds_total                 # CPU seconds
+rate(requests_total[5m])               # Request rate (per second, last 5 min)
+histogram_quantile(0.95, latency)      # 95th percentile latency
+```
+
+**Grafana:**
+- Visualizes Prometheus data
+- Creates dashboards
+- Sets up alerts (if metric threshold exceeded)
+
+---
+
+## Logging Best Practices
+
+**Structure your logs:**
+```json
+{
+  "timestamp": "2024-01-12T10:30:45Z",
+  "level": "ERROR",
+  "service": "payment-api",
+  "user_id": "user123",
+  "message": "Payment processing failed",
+  "error": "Invalid credit card",
+  "request_id": "req-abc123"
+}
+```
+
+**Don't log:**
+- Passwords, API keys, credit cards
+- Excessive debug info in production
+
+**Do log:**
+- Errors and warnings
+- User actions (login, transactions)
+- System events (service starts, deployments)
+- Request IDs (trace requests across services)
+
+---
+
+## Alert Rules (Alerting)
+
+```yaml
+# Example alert rule
+alert: HighCPUUsage
+expr: node_cpu_seconds_total > 80
+for: 5m                               # Alert if true for 5+ minutes
+annotations:
+  summary: "CPU usage high on {{ $labels.instance }}"
+  description: "CPU has been >80% for 5 minutes"
+```
+
+---
+
+## Common Logging Stacks
+
+**ELK (Elasticsearch, Logstash, Kibana):**
+- Logstash: Collect + process logs
+- Elasticsearch: Index and store
+- Kibana: Visualize and search
+
+**Cloud-Native:**
+- **AWS CloudWatch:** Logs + metrics + alarms
+- **Google Cloud Logging:** Structured logging, BigQuery integration
+- **Azure Monitor:** Integrated monitoring across Azure
+
+---
+
+Topic 10.9:
+Title: Integration & DevOps Mindset
+Order: 9
+
+Class 10.9.1:
+	Title: Putting It All Together
+	Description: How all these tools connect in real workflows.
+Content Type: text
+Duration: 400
+Order: 1
+		Text Content :
+
+# Putting It All Together: DevOps Workflows
+
+## Typical DevOps Day-to-Day
+
+**Morning:**
+1. Check monitoring dashboard (Grafana)
+2. Review alerts from overnight (Prometheus)
+3. Check CI/CD pipelines for any failed deployments (GitHub Actions)
+4. On-call handoff (any ongoing incidents?)
+
+**Development Support:**
+- Developer has issue → Check logs (CloudWatch/ELK)
+- Investigate metrics (which service is slow?)
+- Check Git history (what changed recently?)
+- Debug container (kubectl exec into Pod)
+- Scale if needed (k8s HPA or manually)
+
+**Deployment Day:**
+```
+Code pushed → CI/CD pipeline triggers
+             → Tests run (unit, integration, smoke tests)
+             → Docker image built
+             → Image pushed to registry (ECR)
+             → Kubernetes Deployment updated
+             → Rolling update (new Pods created, old Pods killed)
+             → Monitoring alerts if errors spike
+             → Metrics reviewed post-deploy
+```
+
+**Incident Response:**
+```
+Alert fires (CPU too high, error rate spiking)
+  → Check dashboards (what service? what resource?)
+  → Check logs (why? error messages?)
+  → Check recent changes (git log, deployment history)
+  → Potential fixes:
+     1. Rollback last deployment
+     2. Scale up (more servers/replicas)
+     3. Optimize code (if chronic issue)
+  → Implement fix
+  → Monitor recovery
+  → Post-mortem (why did it happen? prevent next time?)
+```
+
+---
+
+## Full-Stack Example: Deploying a Web App
+
+**App Stack:**
+- Code: Python Flask app (GitHub)
+- Container: Docker image
+- Registry: AWS ECR (Elastic Container Registry)
+- Orchestration: Kubernetes (EKS)
+- Database: AWS RDS (PostgreSQL)
+- Monitoring: Prometheus + Grafana
+- Logging: AWS CloudWatch
+- CI/CD: GitHub Actions
+
+**Flow:**
+```
+Developer commits code to main branch
+                ↓
+GitHub webhook triggers GitHub Actions
+                ↓
+1. Actions checks out code
+2. Runs tests (pytest)
+3. Builds Docker image
+4. Pushes to ECR
+                ↓
+5. Updates Kubernetes Deployment manifest
+6. kubectl apply triggers rolling update
+                ↓
+7. Old Pods terminate, new Pods start
+8. Service load balancer routes to new Pods
+                ↓
+9. Monitoring:
+   - Prometheus scrapes metrics from app
+   - Grafana displays CPU, memory, request rate
+   - If error rate spikes → Alert fires
+                ↓
+10. Logging:
+    - Logs shipped to CloudWatch
+    - Dev searches for errors
+    - Can trace request via request_id
+                ↓
+11. Everything green ✓ Deployment successful
+```
+
+---
+
+## DevOps Mindset
+
+**1. Automate Everything**
+- Manual deployments = slow and error-prone
+- Automate builds, tests, deployments, rollbacks
+
+**2. Monitor Everything**
+- Can't manage what you can't measure
+- Instruments apps with metrics and logs
+- Set up alerts for abnormal behavior
+
+**3. Fail Fast**
+- Small changes = quick feedback
+- Deploy multiple times a day (not quarterly)
+- Catch issues early (in testing, not production)
+
+**4. Own It**
+- "You build it, you run it"
+- Developers and ops collaborate from day 1
+- Shared responsibility for uptime
+
+**5. Continuous Learning**
+- Tech changes fast
+- New tools, techniques, best practices emerge
+- Stay curious and experiment safely
+
+**6. Document and Share**
+- Runbooks for common tasks
+- Post-mortems after incidents (blameless)
+- Knowledge base for team
+
+---
+
+## Quick Review: Tool Purposes
+
+| Tool | Purpose | In This Course? |
+|------|---------|-----------------|
+| **Linux** | Operating system for servers | Yes (Module 2) |
+| **Bash** | Scripting / automation | Yes (Module 2) |
+| **Git** | Version control | Yes (Module 3) |
+| **AWS** | Cloud platform (compute, storage, DB) | Yes (Module 4) |
+| **Docker** | Container packaging | Yes (Module 5) |
+| **GitHub Actions** | CI/CD automation | Yes (Module 6) |
+| **Terraform** | Infrastructure as Code | Yes (Module 7) |
+| **Kubernetes** | Container orchestration | Yes (Module 8) |
+| **Prometheus** | Metrics collection | Yes (Module 9) |
+| **Grafana** | Metrics visualization | Yes (Module 9) |
+
+---
+
+## Interview Tip
+
+When asked "Walk me through how you deployed a web app," you can now answer:
+
+**"We used Git for version control, GitHub Actions for CI/CD to automatically test and build Docker images, pushed to AWS ECR, deployed to Kubernetes on AWS EKS, used Terraform for infrastructure, and monitored with Prometheus and Grafana. If issues appeared, we'd check logs in CloudWatch and metrics in Grafana, then decide to scale, rollback, or investigate the application code."**
+
+That covers: Git, CI/CD, Docker, AWS, Kubernetes, IaC, and Monitoring. Interviewer is impressed. ✓
+
+---
+
+
+
+Module 11:
 Title: DevOps Interview Preparation for Juniors
 Description: Turn your technical skills into a job offer. Learn how to structure a winning DevOps resume, build a GitHub portfolio that proves your expertise, and master the technical and behavioral questions asked by hiring managers at top tech firms.
-Order: 10
+Order: 11
 Learning Outcomes:
 Create an ATS-friendly resume highlighting DevOps tools and projects
 Optimize GitHub and LinkedIn profiles to attract recruiters
 Master common technical questions on Linux, AWS, and CI/CD
 Apply the STAR method to ace behavioral and cultural fit rounds
 
-Topic 10.1:
+Topic 11.1:
 Title: Resume & Portfolio
 Order: 1
 
-Class 10.1.1:
+Class 11.1.1:
 	Title: Building a DevOps Resume
 	Description: Formatting, keywords, and project highlighting.
 Content Type: text
@@ -13649,7 +14823,7 @@ And make sure at least 1 project mentions these tools
 
 ---
 
-Class 10.1.2:
+Class 11.1.2:
 	Title: GitHub Portfolio Best Practices
 	Description: Turning your code into a portfolio.
 Content Type: text
@@ -13856,7 +15030,7 @@ Count:
 
 ---
 
-Class 10.1.3:    * **Architecture Diagram:** Draw the flow (Draw.io).
+Class 11.1.3:    * **Architecture Diagram:** Draw the flow (Draw.io).
     * **Prerequisites:** What do I need to run this?
     * **How to Run:** `docker-compose up`.
     * **Screenshots:** Proof it works.
@@ -13864,7 +15038,7 @@ Class 10.1.3:    * **Architecture Diagram:** Draw the flow (Draw.io).
 ## 2. Pinned Repositories
 Pin your best 3-4 projects (e.g., "K8s-Deployment", "Python-Automation-Script"). Do not pin forks of other people's code.
 
-Class 10.1.3:
+Class 11.1.3:
 	Title: LinkedIn Profile Optimization
 	Description: Getting found by recruiters.
 Content Type: text
@@ -14013,11 +15187,11 @@ Your GitHub shows commits to 100k-star projects = instant credibility
 
 ---
 
-Class 10.2:
+Class 11.2:
 Title: Technical Interview Prep
 Order: 2
 
-Class 10.2.1:
+Class 11.2.1:
 	Title: Common Junior DevOps Questions
 	Description: The "Must-Know" theoretical questions.
 Content Type: text
@@ -14129,7 +15303,7 @@ This tests your understanding of networking stack. Answer in order:
 
 ## 5. "Describe a time you fixed a production issue"
 
-Use the STAR format (see Module 10.3).
+Use the STAR format (see Module 11.3).
 
 ```
 Situation: "We deployed a new feature Friday afternoon.
@@ -14165,7 +15339,7 @@ Result: "Resolved incident in 45 minutes.
 
 ---
 
-Class 10.2.2:
+Class 11.2.2:
 	Title: Linux Command Line Interviews
 	Description: Live debugging and scripting questions.
 Content Type: text
@@ -14349,7 +15523,7 @@ netstat -tuln
 
 ---
 
-Class 10.2.3:
+Class 11.2.3:
 	Title: AWS & Cloud Questions
 	Description: Scenario-based architecture questions.
 Content Type: text
@@ -14524,7 +15698,7 @@ User impact: Brief connection loss, automatic reconnect
 
 ---
 
-Class 10.2.4:
+Class 11.2.4:
 	Title: Live Coding Preparation
 	Description: Bash and Python coding rounds.
 Content Type: text
@@ -14734,11 +15908,11 @@ Communication (10%):
 
 ---
 
-Topic 10.3:
+Topic 11.3:
 Title: Behavioral Interviews
 Order: 3
 
-Class 10.3.1:
+Class 11.3.1:
 	Title: STAR Method for DevOps
 	Description: Structuring your stories.
 Content Type: text
@@ -14759,7 +15933,7 @@ Order: 1
 ## 4. Result
 "Deployments went down to 5 minutes, and we had zero manual errors for the next 3 months."
 
-Class 10.3.2:
+Class 11.3.2:
 	Title: Common Behavioral Questions
 	Description: Handling conflict and failure questions.
 Content Type: text
