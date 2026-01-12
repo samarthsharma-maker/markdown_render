@@ -478,7 +478,6 @@ ls
 ls -l    # Long listing: permissions, owner, size, date
 ls -a    # Include hidden files starting with '.'
 ```
-```
 
 ---
 
@@ -730,7 +729,6 @@ Example:
 # List all running processes, filter for python processes, and count them
 ps aux | grep python | wc -l
 ```
-```
 
 **Explanation:**
 
@@ -861,7 +859,6 @@ kill -9 1234
 
 # Kill by process name
 pkill python3
-```
 ```
 
 
@@ -4159,7 +4156,6 @@ These instructions exist regardless of language or framework.
 
 ```dockerfile
 FROM ubuntu:22.04
-```
 ```
 
 * Defines the starting point of the image
